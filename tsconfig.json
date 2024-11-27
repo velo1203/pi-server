@@ -6,7 +6,7 @@
         "skipLibCheck": true,
         "strict": false,
         "noEmit": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "esModuleInterop": true,
         "module": "esnext",
         "moduleResolution": "bundler",
