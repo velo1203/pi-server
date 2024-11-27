@@ -35,7 +35,7 @@ class SchoolApi {
                 }
 
                 result = result.replace(/[0-9./\-*]/g, "");
-                return result.trim();
+                return "급식 섹션\n" + result.trim();
             } else {
                 return "오늘은 급식이 없습니다.";
             }
