@@ -27,7 +27,7 @@ class SchoolApi {
                     result += `<저녁>\n${dinner
                         .replace(/[0-9./\-*]/g, "")
                         .trim()}\n\n`;
-                }
+                } // This is the part that is different from the original code
 
                 return result.trim();
             } else {
