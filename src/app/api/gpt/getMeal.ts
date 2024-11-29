@@ -1,41 +1,35 @@
 import axios from "axios";
 
 class SchoolApi {
-    private static readonly baseUrl = "https://open.neis.go.kr/hub/";
-    private static readonly apiKey = process.env.NEISKEY;
-    private static readonly schoolCode = "7530560";
-    private static readonly eduOfficeCode = "J10";
-
-    private static readonly defaultParams = {
-        KEY: SchoolApi.apiKey,
-        Type: "json",
-        ATPT_OFCDC_SC_CODE: SchoolApi.eduOfficeCode,
-        SD_SCHUL_CODE: SchoolApi.schoolCode,
-    };
+    private static readonly baseUrl = "https://api.디미고급식.com/meal/";
 
     public static async getMeal(date: string): Promise<string> {
         try {
-            const url = SchoolApi.baseUrl + "mealServiceDietInfo";
-            const params = {
-                ...SchoolApi.defaultParams,
-                MLSV_YMD: date,
-            };
-
-            const response = await axios.get(url, { params });
+            const url = `${SchoolApi.baseUrl}${date}`;
+            const response = await axios.get(url);
             const data = response.data;
 
-            if (data.mealServiceDietInfo) {
-                const meals = data.mealServiceDietInfo[1].row;
-                let result = "";
+            if (data) {
+                const { breakfast, lunch, dinner } = data;
 
-                for (const meal of meals) {
-                    const mealType = meal.MMEAL_SC_NM;
-                    const dishes = meal.DDISH_NM.replace(/<br\/>/g, "\n");
-                    result += `<${mealType}>\n${dishes}\n\n`;
+                let result = "급식 섹션\n";
+                if (breakfast) {
+                    result += `<아침>\n${breakfast
+                        .replace(/[0-9./\-*]/g, "")
+                        .trim()}\n\n`;
+                }
+                if (lunch) {
+                    result += `<점심>\n${lunch
+                        .replace(/[0-9./\-*]/g, "")
+                        .trim()}\n\n`;
+                }
+                if (dinner) {
+                    result += `<저녁>\n${dinner
+                        .replace(/[0-9./\-*]/g, "")
+                        .trim()}\n\n`;
                 }
 
-                result = result.replace(/[0-9./\-*]/g, "");
-                return "급식 섹션\n" + result.trim();
+                return result.trim();
             } else {
                 return "오늘은 급식이 없습니다.";
             }

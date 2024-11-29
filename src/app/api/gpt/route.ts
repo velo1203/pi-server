@@ -40,8 +40,7 @@ export async function POST(req) {
         const lowerPrompt = prompt.toLowerCase();
 
         if (lowerPrompt.includes("급식") || lowerPrompt.includes("meal")) {
-            const formattedDate = dateString.replace(/-/g, "");
-            const meal = await SchoolApi.getMeal(formattedDate);
+            const meal = await SchoolApi.getMeal(dateString);
             addContext += `\n오늘 날짜: ${dateString} (${weekday})`;
             addContext += `\n급식: ${meal}`;
         }
