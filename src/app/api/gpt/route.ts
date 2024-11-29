@@ -50,8 +50,13 @@ export async function POST(req) {
             lowerPrompt.includes("시간표") ||
             lowerPrompt.includes("timetable")
         ) {
-            const timetableText = JSON.stringify(timetable);
-            addContext += `\n시간표: ${timetableText}`;
+            const todaySchedule = timetable.timetable[weekday];
+
+            if (todaySchedule) {
+                addContext += `\n시간표: ${JSON.stringify(todaySchedule)}`;
+            } else {
+                addContext += `\n시간표: 오늘은 등록된 시간표가 없습니다.`;
+            }
         }
 
         const finalPrompt = addContext
@@ -59,7 +64,7 @@ export async function POST(req) {
             : prompt;
 
         const response = await openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4",
             messages: [{ role: "user", content: finalPrompt }],
             max_tokens: 5000,
         });
